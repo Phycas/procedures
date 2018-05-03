@@ -1,0 +1,42 @@
+DELIMITER //
+
+CREATE PROCEDURE digito_rut(rut VARCHAR(20)) 
+BEGIN   
+    DECLARE cuenta INT unsigned;
+	DECLARE suma INT unsigned;
+	DECLARE largoRut INT unsigned;
+	DECLARE mult INT unsigned;
+	DECLARE rutINT INT unsigned;
+	DECLARE digitoVerificador INT unsigned;
+	DECLARE moduloMagico INT unsigned;
+	DECLARE numero VARCHAR(2);
+	DECLARE rutIndex INT unsigned;
+	
+	SET largoRut = char_length(rut);
+	SET mult = 2;
+	SET cuenta = 0;
+	SET suma = 0;
+	SET rutIndex = largoRut;
+    #loop
+	#WHILE cuenta <= largoRut DO
+	WHILE rutIndex > 0 DO
+		SET numero = SUBSTR(rut, rutIndex, 1);
+		SET rutINT = CAST(numero AS UNSIGNED);
+		
+		SET suma = suma + (rutINT * mult); #añadir a la suma.
+				
+		SET mult = mult + 1; #aumentar el multiplicador
+		SET mult = IF(mult>7, 2, mult); #devolver a 2 multiplicador.
+		SET cuenta = cuenta + 1;
+		SET rutIndex = rutIndex - 1;
+	END WHILE;
+	
+	SET moduloMagico = MOD(suma,11);
+	SET digitoVerificador = 11 - moduloMagico; #generar el digito
+	
+	SELECT digitoVerificador AS 'Digito verificador es:'; 
+END; //
+
+DELIMITER ;
+
+CALL digito_rut('18148332');
