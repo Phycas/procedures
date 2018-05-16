@@ -1,0 +1,31 @@
+DELIMITER //
+CREATE PROCEDURE verificar_rut(rut VARCHAR(20)) 
+BEGIN   
+    DECLARE numeros INT UNSIGNED;
+	DECLARE digitoV INT UNSIGNED;
+	DECLARE str_numeros VARCHAR(20);
+	DECLARE str_digitoV VARCHAR(20);
+
+	SET str_numeros = SUBSTRING_INDEX(rut, "-", 1); #capturar rut
+	SET str_digitoV = SUBSTRING_INDEX(rut, "-", -1); #capturar digito verificador
+
+	#SELECT str_numeros, str_digitoV, rut; #hasta aquí todo bien
+
+	#SET digitoV = IF(str_digitoV='k', 10, CAST(str_digitoV AS UNSIGNED);
+	#SET numeros = CAST(str_numeros AS UNSIGNED);
+
+	#SELECT digitoV, numeros;
+
+END; //
+
+DELIMITER ;
+
+CALL verificar_rut('18148332-6');
+
+
+#SELECT IF(500<1000, 5, 10);
+
+	#IF search_condition THEN statement_list
+	#    [ELSEIF search_condition THEN statement_list] ...
+	#    [ELSE statement_list]
+	#END IF
