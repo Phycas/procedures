@@ -9,13 +9,11 @@ BEGIN
 	SET str_numeros = '18148332';
 	SET str_digitoV = 'k';
 
-	#SELECT str_numeros, str_digitoV; #hasta aquí todo bien
-
-	#esto no funciona
-	IF str_digitoV = 'k' THEN SET digitoV = 10;
-	ELSE IF str_digitoV = '0' THEN SET digitoV = 11;
-	ELSE SET digitoV = CAST(str_digitoV AS UNSIGNED);
-	END IF;
+	CASE str_digitoV
+		WHEN 'k' THEN SET digitoV = 10;
+		WHEN '0' THEN SET digitoV = 11;
+		ELSE SET digitoV = CAST(str_digitoV AS UNSIGNED);
+	END CASE;
 
 	SET numeros = CAST(str_numeros AS UNSIGNED); # esto funciona
 

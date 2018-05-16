@@ -6,6 +6,7 @@ BEGIN
 	DECLARE str_numeros VARCHAR(20);
 	DECLARE str_digitoV VARCHAR(20);
 	DECLARE aux_digito INT UNSIGNED;
+	DECLARE mensaje VARCHAR(100);
 
 	SET str_numeros = SUBSTRING_INDEX(rut, "-", 1); #capturar rut
 	SET str_digitoV = SUBSTRING_INDEX(rut, "-", -1); #capturar digito verificador
@@ -22,6 +23,11 @@ BEGIN
 
 	CALL verificar_digito_rut(str_numeros, aux_digito); #todo bien
 
+	IF digitoV = aux_digito THEN SET mensaje = 'Este rut es válido';
+	ELSE SET mensaje = 'Este rut no es válido';
+	END IF;
+
+	SELECT rut, mensaje;
 
 
 END; //
