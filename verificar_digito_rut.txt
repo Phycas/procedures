@@ -1,13 +1,13 @@
 DELIMITER //
 
-CREATE PROCEDURE digito_rut(rut VARCHAR(20)) 
+CREATE PROCEDURE verificar_digito_rut(rut VARCHAR(20), OUT digitoVerificador INT UNSIGNED) 
 BEGIN   
     DECLARE cuenta INT unsigned;
 	DECLARE suma INT unsigned;
 	DECLARE largoRut INT unsigned;
 	DECLARE mult INT unsigned;
 	DECLARE rutINT INT unsigned;
-	DECLARE digitoVerificador INT unsigned;
+	
 	DECLARE moduloMagico INT unsigned;
 	DECLARE numero VARCHAR(2);
 	DECLARE rutIndex INT unsigned;
@@ -17,8 +17,8 @@ BEGIN
 	SET cuenta = 0;
 	SET suma = 0;
 	SET rutIndex = largoRut;
+
     #loop
-	
 	WHILE rutIndex > 0 DO
 		SET numero = SUBSTR(rut, rutIndex, 1);
 		SET rutINT = CAST(numero AS UNSIGNED);
@@ -34,9 +34,8 @@ BEGIN
 	SET moduloMagico = MOD(suma,11);
 	SET digitoVerificador = 11 - moduloMagico; #generar el digito
 	
-	SELECT digitoVerificador AS 'Digito verificador es:'; 
+	
 END; //
 
 DELIMITER ;
 
-CALL digito_rut('18148332');

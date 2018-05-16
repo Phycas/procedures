@@ -1,0 +1,35 @@
+DELIMITER //
+CREATE PROCEDURE test1() 
+BEGIN   
+    DECLARE numeros INT UNSIGNED;
+	DECLARE digitoV INT UNSIGNED;
+	DECLARE str_numeros VARCHAR(20);
+	DECLARE str_digitoV VARCHAR(20);
+
+	SET str_numeros = '18148332';
+	SET str_digitoV = 'k';
+
+	#SELECT str_numeros, str_digitoV; #hasta aquí todo bien
+
+	#esto no funciona
+	IF str_digitoV = 'k' THEN SET digitoV = 10;
+	ELSE IF str_digitoV = '0' THEN SET digitoV = 11;
+	ELSE SET digitoV = CAST(str_digitoV AS UNSIGNED);
+	END IF;
+
+	SET numeros = CAST(str_numeros AS UNSIGNED); # esto funciona
+
+	SELECT digitoV, numeros;
+END; //
+
+DELIMITER ;
+
+CALL test1();
+
+
+#SELECT IF(500<1000, 5, 10);
+
+	#IF search_condition THEN statement_list
+	#    [ELSEIF search_condition THEN statement_list] ...
+	#    [ELSE statement_list]
+	#END IF

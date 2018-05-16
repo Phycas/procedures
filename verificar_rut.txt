@@ -5,16 +5,24 @@ BEGIN
 	DECLARE digitoV INT UNSIGNED;
 	DECLARE str_numeros VARCHAR(20);
 	DECLARE str_digitoV VARCHAR(20);
+	DECLARE aux_digito INT UNSIGNED;
 
 	SET str_numeros = SUBSTRING_INDEX(rut, "-", 1); #capturar rut
 	SET str_digitoV = SUBSTRING_INDEX(rut, "-", -1); #capturar digito verificador
 
-	#SELECT str_numeros, str_digitoV, rut; #hasta aquí todo bien
+	#SELECT str_numeros, str_digitoV, rut; 
 
-	#SET digitoV = IF(str_digitoV='k', 10, CAST(str_digitoV AS UNSIGNED);
-	#SET numeros = CAST(str_numeros AS UNSIGNED);
+	CASE str_digitoV
+		WHEN 'k' THEN SET digitoV = 10;
+		WHEN '0' THEN SET digitoV = 11;
+		ELSE SET digitoV = CAST(str_digitoV AS UNSIGNED);
+	END CASE;
 
-	#SELECT digitoV, numeros;
+	SET numeros = CAST(str_numeros AS UNSIGNED); 
+
+	CALL verificar_digito_rut(str_numeros, aux_digito); #todo bien
+
+
 
 END; //
 
@@ -22,10 +30,3 @@ DELIMITER ;
 
 CALL verificar_rut('18148332-6');
 
-
-#SELECT IF(500<1000, 5, 10);
-
-	#IF search_condition THEN statement_list
-	#    [ELSEIF search_condition THEN statement_list] ...
-	#    [ELSE statement_list]
-	#END IF
