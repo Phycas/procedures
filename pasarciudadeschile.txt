@@ -1,0 +1,33 @@
+DROP procedure if exists textc;
+//
+CREATE PROCEDURE textc()
+BEGIN
+DECLARE termina BOOL DEFAULT FALSE;
+DECLARE aux_ciudad_nombre VARCHAR(250) default '';
+DECLARE v_aux varchar(20000) default '';
+
+
+DECLARE ciudades_chile_CR CURSOR FOR
+SELECT Name FROM city WHERE CountryCode = 'CHL';
+
+DECLARE CONTINUE HANDLER
+FOR SQLSTATE '02000'
+SET termina = TRUE;
+
+OPEN ciudades_chile_CR;
+Recorre_Cursor: LOOP
+	FETCH ciudades_chile_CR INTO aux_ciudad_nombre;
+
+	IF termina THEN
+		LEAVE Recorre_Cursor;
+	END IF;
+
+	INSERT INTO ciudades_chile(ciudad_nombre) VALUES(aux_ciudad_nombre);
+	#SET v_aux = concat(v_aux,';',aux_ciudad_nombre);
+END LOOP;
+
+CLOSE ciudades_chile_CR;
+SELECT v_aux;
+END
+//
+call textc();
