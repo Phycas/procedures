@@ -1,0 +1,54 @@
+CREATE TABLE sueldos(
+    rut varchar(255),
+    nombre varchar(255),
+    sueldo INT UNSIGNED,
+    edad INT UNSIGNED,
+    fecha_ingreso TIMESTAMP,
+    PRIMARY KEY (rut),
+    );
+    
+   CREATE TABLE sueldos_mejorados(
+    rut varchar(255),
+    sueldo_anterior INT UNSIGNED,
+    sueldo_mejorado INT UNSIGNED,
+    PRIMARY KEY (rut),
+    FOREIGN KEY (rut) REFERENCES sueldos(rut)
+    );
+    
+INSERT INTO sueldos(rut, nombre, sueldo, edad, fecha_ingreso)
+VALUES ('15.156.332-6', 'Perro ATATATA', 150000, 22, '2011/08/25');
+
+
+DELIMITER //
+
+CREATE PROCEDURE transferirSueldos() 
+BEGIN   
+   
+INSERT INTO sueldos_mejorados (rut, sueldo_anterior)
+SELECT rut,sueldo FROM sueldos
+WHERE (DATEDIFF( CURRENT_TIMESTAMP, fecha_ingreso) / 365) > 2 AND sueldo < 500000 AND edad > 40;
+
+END; //
+
+DELIMITER //
+
+CREATE PROCEDURE actualizarSueldos() 
+BEGIN   
+   
+UPDATE sueldos_mejorados
+SET sueldo_mejorado = subirSueldo(sueldo_anterior)
+
+END; //
+
+DELIMITER //
+
+CREATE FUNCTION subirSueldo(sal INT UNSIGNED) RETURNS INT UNSIGNED
+BEGIN   
+   
+DECLARE respuesta INT UNSIGNED;
+SET respuesta = sal + (sal * 0.25);
+
+RETURN respuesta;
+END; //
+
+

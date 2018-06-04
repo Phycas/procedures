@@ -1,0 +1,93 @@
+base de datos empresa de desarrollo de software 
+tablas: empleados - departamentos
+
+empleados:
+	-rut
+	-nombre completo
+	-cargo FK
+	-fecha de ingreso
+
+cargo: 
+	-nombre: jefe de proyecto - analista - programador - testing - diseñador gráfico
+	-salario: jefe de proyectos 1500000 > analista  1000000 > programador 7000000 > testing $500000 > diseñador gráfico $300000
+
+stored procedure que reciba como parametro el rut del empleado y retorne el salario menos el 10% (el calculo del descuento se saca con una funcion)
+
+CREATE TABLE empleados(
+    personaid INT NOT NULL AUTO_INCREMENT,
+    nombre varchar(255),
+    rut varchar(255),
+    cargo varchar(255),
+    fecha_ingreso TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (personaid),
+    FOREIGN KEY (cargo) REFERENCES cargos(cargoid)
+    );
+   
+
+CREATE TABLE cargos(
+    cargoid INT NOT NULL AUTO_INCREMENT,
+    nombreCargo varchar(255),
+    salario INT UNSIGNED,
+    PRIMARY KEY (cargoid)
+);
+
+INSERT INTO empleados (nombre, rut, cargo)
+VALUES ('Choro mota', '15.146.332-6', 1)
+
+
+INSERT INTO cargos (nombreCargo, salario)
+VALUES ('Jefe de Proyectos', 4000000);
+
+
+
+DELIMITER //
+
+CREATE PROCEDURE ver_salario_max(rut VARCHAR(255)) 
+BEGIN   
+   
+DECLARE nombre VARCHAR(255);
+DECLARE salario INT UNSIGNED;
+DECLARE cargo VARCHAR(255);
+
+SELECT cargos.salario INTO salario
+FROM empleados INNER JOIN cargos
+ON empleados.cargo = cargos.cargoid
+WHERE empleados.rut = rut;
+
+SELECT empleados.nombre INTO nombre
+FROM empleados
+WHERE empleados.rut = rut;
+
+SELECT cargos.nombreCargo INTO cargo
+FROM empleados INNER JOIN cargos
+ON empleados.cargo = cargos.cargoid
+WHERE empleados.rut = rut;
+
+SELECT nombre, cargo, retencion(salario) AS salario;
+
+END; //
+
+
+DELIMITER //
+
+CREATE FUNCTION retencion(sal INT UNSIGNED) RETURNS INT UNSIGNED
+BEGIN   
+   
+DECLARE respuesta INT UNSIGNED;
+SET respuesta = sal - (sal * 0.10);
+
+RETURN respuesta;
+END; //
+
+
+DELIMITER //
+
+CREATE PROCEDURE ver_tabla_max() 
+BEGIN 
+
+SELECT empleados.nombre AS Nombre, cargos.nombreCargo AS cargo, cargos.salario AS 'salario bruto', retencion(cargos.salario) AS 'Salario Líquido'
+FROM empleados INNER JOIN cargos
+ON empleados.cargo = cargos.cargoid;
+
+END; //
+
